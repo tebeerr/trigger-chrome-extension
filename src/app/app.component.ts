@@ -1,10 +1,11 @@
 import { Component,CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import {InputTriggerComponent} from "./input-trigger/input-trigger.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, InputTriggerComponent],
   templateUrl: './app.component.html',
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
