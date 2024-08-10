@@ -6,24 +6,32 @@ import {InputTriggerComponent} from "./input-trigger/input-trigger.component";
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, InputTriggerComponent],
-  templateUrl: './app.component.html',
+  template: `
+    <button (click)="detectInputs()">Detect Inputs</button>
+    <p *ngIf="result">
+      Text inputs: {{ result.textInputs }}<br>
+      Password inputs: {{ result.passwordInputs }}
+    </p>
+  `,
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 
 export class AppComponent {
-  title = 'trigger-chrome-extension';
-}
 
-function checkForInputs() {
-  let hasPasswordInput = document.querySelector('input[type="password"]') !== null;
-  let hasTextInput = document.querySelector('input[type="text"]') !== null;
+  result: { textInputs: number; passwordInputs: number } | null = null;
 
-  if (hasPasswordInput || hasTextInput) {
-    console.log('This page has password or text input fields.');
-    // You can trigger your desired action here
-  } else {
-    console.log('This page does not have password or text input fields.');
+  detectInputs() {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      const activeTab = tabs[0];
+      if (activeTab.id) {
+        chrome.tabs.sendMessage(
+          activeTab.id,
+          { action: 'detectInputs' },
+          (response) => {
+            this.result = response;
+          }
+        );
+      }
+    });
   }
 }
-
-window.addEventListener('load', checkForInputs);
