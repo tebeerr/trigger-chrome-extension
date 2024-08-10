@@ -26,5 +26,4 @@ function checkForInputs() {
   }
 }
 
-// Call the function when the page loads
 window.addEventListener('load', checkForInputs);
