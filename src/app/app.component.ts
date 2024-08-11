@@ -1,17 +1,18 @@
 import { Component,CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import {InputTriggerComponent} from "./input-trigger/input-trigger.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, InputTriggerComponent],
+  imports: [RouterOutlet],
   template: `
+    @if (result) {
     <button (click)="detectInputs()">Detect Inputs</button>
-    <p *ngIf="result">
-      Text inputs: {{ result.textInputs }}<br>
-      Password inputs: {{ result.passwordInputs }}
+    <p>
+    Text inputs: {{ result.textInputs }}<br>
+    Password inputs: {{ result.passwordInputs }}
     </p>
+    }
   `,
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
