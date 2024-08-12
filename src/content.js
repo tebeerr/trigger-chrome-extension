@@ -1,8 +1,13 @@
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === 'detectPasswordInputs') {
+  if (request.action === 'detectInputs') {
     const passwordInputs = document.querySelectorAll('input[type="password"]');
-    if (passwordInputs.length > 0) {
-      passwordInputs.forEach(input => {
+    const textInputs = document.querySelectorAll('input[type="text"]');
+    const emailInputs = document.querySelectorAll('input[type="email"]');
+
+    const allInputs = [...passwordInputs, ...textInputs, ...emailInputs];
+
+    if (allInputs.length > 0) {
+      allInputs.forEach(input => {
         // Create a container for the input and icon
         const container = document.createElement('div');
         container.style.position = 'relative';
@@ -26,6 +31,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         container.appendChild(icon);
       });
     }
-    sendResponse({ hasPasswordInput: passwordInputs.length > 0 });
+    sendResponse({
+      hasPasswordInput: passwordInputs.length > 0,
+      hasTextInput: textInputs.length > 0,
+      totalInputs: allInputs.length
+    });
   }
 });

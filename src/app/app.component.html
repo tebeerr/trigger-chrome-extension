@@ -1,10 +1,13 @@
 <div class="body">
-  <h1>Password Input Detector</h1>
-  <button (click)="detectPasswordInputs()">Detect Password Inputs</button>
+  <h1>Input Detector</h1>
+  <button (click)="detectInputs()">Detect Inputs</button>
   @if (result) {
     <p>{{ result }}</p>
     @if (iconAdded) {
-      <p>icon has been added next to the password input(s).</p>
+      <p>Icon has been added next to the detected input(s).</p>
+      @if (inputDetails) {
+        <p>{{ inputDetails }}</p>
+      }
     }
   }
 </div>

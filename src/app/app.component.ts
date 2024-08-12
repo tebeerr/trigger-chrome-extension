@@ -11,21 +11,24 @@ import { RouterOutlet } from '@angular/router';
 export class AppComponent {
   result: string | null = null;
   iconAdded: boolean = false;
+  inputDetails: string | null = null;
 
-  detectPasswordInputs() {
+  detectInputs() {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       const activeTab = tabs[0];
       if (activeTab.id) {
         chrome.tabs.sendMessage(
           activeTab.id,
-          { action: 'detectPasswordInputs' },
+          { action: 'detectInputs' },
           (response) => {
             if (response.hasPasswordInput) {
-              this.result = "Password input(s) detected and icon added";
+              this.result = "input(s) detected and icon added";
               this.iconAdded = true;
+              this.inputDetails = `Password inputs: ${response.hasPasswordInput ? 'Yes' : 'No'}, Text inputs: ${response.hasTextInput ? 'Yes' : 'No'}, Email inputs: ${response.hasEmailInput ? 'Yes' : 'No'}, Total inputs: ${response.totalInputs}`;
             } else {
-              this.result = "No password inputs detected on this page";
+              this.result = "No inputs detected on this page";
               this.iconAdded = false;
+              this.inputDetails = null;
             }
           }
         );
