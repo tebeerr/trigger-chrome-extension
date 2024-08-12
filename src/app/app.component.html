@@ -3,5 +3,8 @@
   <button (click)="detectPasswordInputs()">Detect Password Inputs</button>
   @if (result) {
     <p>{{ result }}</p>
+    @if (iconAdded) {
+      <p>icon has been added next to the password input(s).</p>
+    }
   }
 </div>
