@@ -1,3 +1,7 @@
 <div class="body">
-    <h1 style="color: red">Adds a border to the current page</h1>
+  <h1>Password Input Detector</h1>
+  <button (click)="detectPasswordInputs()">Detect Password Inputs</button>
+  @if (result) {
+    <p>{{ result }}</p>
+  }
 </div>

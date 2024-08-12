@@ -5,31 +5,24 @@ import { RouterOutlet } from '@angular/router';
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet],
-  template: `
-    @if (result) {
-    <button (click)="detectInputs()">Detect Inputs</button>
-    <p>
-    Text inputs: {{ result.textInputs }}<br>
-    Password inputs: {{ result.passwordInputs }}
-    </p>
-    }
-  `,
+  templateUrl:'app.component.html',
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 
 export class AppComponent {
+  result: string | null = null;
 
-  result: { textInputs: number; passwordInputs: number } | null = null;
-
-  detectInputs() {
+  detectPasswordInputs() {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       const activeTab = tabs[0];
       if (activeTab.id) {
         chrome.tabs.sendMessage(
           activeTab.id,
-          { action: 'detectInputs' },
+          { action: 'detectPasswordInputs' },
           (response) => {
-            this.result = response;
+            this.result = response.hasPasswordInput
+              ? "There's a password input in this web page"
+              : "There isn't any password input in this web page";
           }
         );
       }
