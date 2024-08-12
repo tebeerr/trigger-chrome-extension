@@ -13,7 +13,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         input.parentNode.replaceChild(container, input);
         container.appendChild(clone);
 
-        // Create and add the SVG icon
+        // Create and implement the icon
         const icon = document.createElement('img');
         icon.src = 'https://storage.googleapis.com/bazz-testing.appspot.com/48x48.png';
         icon.style.position = 'absolute';
