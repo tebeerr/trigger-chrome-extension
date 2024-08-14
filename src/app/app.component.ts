@@ -23,15 +23,15 @@ export class AppComponent {
           {},
           (response: any) => {
             console.log('hello');
-            // if (response.hasPasswordInput) {
-            //   this.result = "input(s) detected and icon added";
-            //   this.iconAdded = true;
-            //   this.inputDetails = `Password inputs: ${response.hasPasswordInput ? 'Yes' : 'No'}, Text inputs: ${response.hasTextInput ? 'Yes' : 'No'}, Email inputs: ${response.hasEmailInput ? 'Yes' : 'No'}, Total inputs: ${response.totalInputs}`;
-            // } else {
-            //   this.result = "No inputs detected on this page";
-            //   this.iconAdded = false;
-            //   this.inputDetails = null;
-            // }
+            if (response.hasPasswordInput) {
+              this.result = "input(s) detected and icon added";
+              this.iconAdded = true;
+              this.inputDetails = `Password inputs: ${response.hasPasswordInput ? 'Yes' : 'No'}, Text inputs: ${response.hasTextInput ? 'Yes' : 'No'}, Email inputs: ${response.hasEmailInput ? 'Yes' : 'No'}, Total inputs: ${response.totalInputs}`;
+            } else {
+              this.result = "No inputs detected on this page";
+              this.iconAdded = false;
+              this.inputDetails = null;
+            }
           }
         );
       }

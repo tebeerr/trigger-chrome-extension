@@ -11,7 +11,6 @@ describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AppComponent],
-
     }).compileComponents();
 
     fixture = TestBed.createComponent(AppComponent);
@@ -32,16 +31,22 @@ describe('AppComponent', () => {
 
   describe('detectInputs', () => {
     let chromeTabsSpy: jasmine.SpyObj<any>;
+    let originalChrome: any;
 
     beforeEach(() => {
       chromeTabsSpy = jasmine.createSpyObj('chrome.tabs', ['query', 'sendMessage']);
+      originalChrome = (window as any).chrome;
       (window as any).chrome = {
         tabs: chromeTabsSpy
       };
     });
 
     afterEach(() => {
-      delete (window as any).chrome;
+      if (originalChrome) {
+        (window as any).chrome = originalChrome;
+      } else {
+        delete (window as any).chrome;
+      }
     });
 
     it('should update component properties when inputs are detected', fakeAsync(() => {
@@ -53,22 +58,19 @@ describe('AppComponent', () => {
         totalInputs: 3
       };
 
-      chromeTabsSpy.query.and.callFake((queryInfo: any, callback?: (result: any[]) => void) => {
-        if (callback) {
-          callback([mockTab]);
-        }
+      chromeTabsSpy.query.and.callFake((queryInfo: any, callback: (result: any[]) => void) => {
+        callback([mockTab]);
         return Promise.resolve([mockTab]);
       });
 
-      chromeTabsSpy.sendMessage.and.callFake((tabId: number, message: any, options: any, callback?: (response: any) => void) => {
-        if (callback) {
-          callback(mockResponse);
-        }
+      chromeTabsSpy.sendMessage.and.callFake((tabId: number, message: any, options: any, callback: (response: any) => void) => {
+        callback(mockResponse);
         return Promise.resolve(mockResponse);
       });
 
       component.detectInputs();
       tick();
+      fixture.detectChanges();
 
       expect(component.result).toBe("input(s) detected and icon added");
       expect(component.iconAdded).toBeTrue();
@@ -86,14 +88,17 @@ describe('AppComponent', () => {
 
       chromeTabsSpy.query.and.callFake((queryInfo: any, callback: (result: any[]) => void) => {
         callback([mockTab]);
+        return Promise.resolve([mockTab]);
       });
 
-      chromeTabsSpy.sendMessage.and.callFake((tabId: number, message: any, callback: (response: any) => void) => {
+      chromeTabsSpy.sendMessage.and.callFake((tabId: number, message: any, options: any, callback: (response: any) => void) => {
         callback(mockResponse);
+        return Promise.resolve(mockResponse);
       });
 
       component.detectInputs();
       tick();
+      fixture.detectChanges();
 
       expect(component.result).toBe("No inputs detected on this page");
       expect(component.iconAdded).toBeFalse();
